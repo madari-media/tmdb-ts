@@ -2,33 +2,36 @@ import {
   AppendToResponse,
   AppendToResponsePersonKey,
   ChangeOption,
+  Changes,
   ExternalIds,
+  LanguageOption,
   PageOption,
   PeopleImages,
-  PersonTranslations,
+  PersonChangeValue,
   PersonCombinedCredits,
   PersonDetails,
   PersonMovieCredit,
+  PersonTranslations,
   PersonTvShowCredit,
-  TaggedImages,
-  Changes,
-  PersonChangeValue,
-  LanguageOption,
   PopularPeople,
+  TaggedImages,
 } from '../types';
 import { BaseEndpoint } from './base';
 
 const BASE_PERSON = '/person';
 
 export class PeopleEndpoint extends BaseEndpoint {
-  constructor(accessToken: string) {
-    super(accessToken);
+  constructor(
+    accessToken: string,
+    private readonly baseURL: string,
+  ) {
+    super(accessToken, baseURL);
   }
 
   async details<T extends AppendToResponsePersonKey[] | undefined>(
     id: number,
     appendToResponse?: T,
-    language?: string
+    language?: string,
   ) {
     const options = {
       append_to_response: appendToResponse
@@ -38,47 +41,47 @@ export class PeopleEndpoint extends BaseEndpoint {
     };
     return await this.api.get<AppendToResponse<PersonDetails, T, 'person'>>(
       `${BASE_PERSON}/${id}`,
-      options
+      options,
     );
   }
 
   async changes(
     id: number,
-    options?: ChangeOption
+    options?: ChangeOption,
   ): Promise<Changes<PersonChangeValue>> {
     return await this.api.get<Changes<PersonChangeValue>>(
       `${BASE_PERSON}/${id}/changes`,
-      options
+      options,
     );
   }
 
   async movieCredits(
     id: number,
-    options?: LanguageOption
+    options?: LanguageOption,
   ): Promise<PersonMovieCredit> {
     return await this.api.get<PersonMovieCredit>(
       `${BASE_PERSON}/${id}/movie_credits`,
-      options
+      options,
     );
   }
 
   async tvShowCredits(
     id: number,
-    options?: LanguageOption
+    options?: LanguageOption,
   ): Promise<PersonTvShowCredit> {
     return await this.api.get<PersonTvShowCredit>(
       `${BASE_PERSON}/${id}/tv_credits`,
-      options
+      options,
     );
   }
 
   async combinedCredits(
     id: number,
-    options?: LanguageOption
+    options?: LanguageOption,
   ): Promise<PersonCombinedCredits> {
     return await this.api.get<PersonCombinedCredits>(
       `${BASE_PERSON}/${id}/combined_credits`,
-      options
+      options,
     );
   }
 
@@ -96,13 +99,13 @@ export class PeopleEndpoint extends BaseEndpoint {
   async taggedImages(id: number, options?: PageOption): Promise<TaggedImages> {
     return await this.api.get<TaggedImages>(
       `${BASE_PERSON}/${id}/tagged_images`,
-      options
+      options,
     );
   }
 
   async translation(id: number): Promise<PersonTranslations> {
     return await this.api.get<PersonTranslations>(
-      `${BASE_PERSON}/${id}/translations`
+      `${BASE_PERSON}/${id}/translations`,
     );
   }
 

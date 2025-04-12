@@ -3,8 +3,11 @@ import { AlternativeNames } from './../types/companies';
 import { BaseEndpoint } from './base';
 
 export class NetworksEndpoint extends BaseEndpoint {
-  constructor(protected readonly accessToken: string) {
-    super(accessToken);
+  constructor(
+    protected readonly accessToken: string,
+    private readonly baseURL: string,
+  ) {
+    super(accessToken, baseURL);
   }
 
   async details(id: number): Promise<NetworkDetails> {
@@ -13,7 +16,7 @@ export class NetworksEndpoint extends BaseEndpoint {
 
   async alternativeNames(id: number): Promise<AlternativeNames> {
     return await this.api.get<AlternativeNames>(
-      `/network/${id}/alternative_names`
+      `/network/${id}/alternative_names`,
     );
   }
 

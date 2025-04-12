@@ -1,18 +1,18 @@
 import {
+  AggregateCredits,
+  AppendToResponse,
+  AppendToResponseTvSeasonKey,
   ChangeOption,
   Changes,
   Credits,
   ExternalIds,
   Images,
   LanguageOption,
-  TvSeasonChangeValue,
   SeasonDetails,
   SeasonSelection,
   Translations,
+  TvSeasonChangeValue,
   Videos,
-  AppendToResponseTvSeasonKey,
-  AppendToResponse,
-  AggregateCredits,
 } from '..';
 import { BaseEndpoint } from './base';
 
@@ -35,14 +35,17 @@ export interface TvSeasonVideoSearchOptions extends LanguageOption {
 }
 
 export class TvSeasonsEndpoint extends BaseEndpoint {
-  constructor(accessToken: string) {
-    super(accessToken);
+  constructor(
+    accessToken: string,
+    private readonly baseURL: string,
+  ) {
+    super(accessToken, baseURL);
   }
 
   async details<T extends AppendToResponseTvSeasonKey[] | undefined>(
     seasonSelection: SeasonSelection,
     appendToResponse?: T,
-    options?: LanguageOption
+    options?: LanguageOption,
   ) {
     const combinedOptions = {
       append_to_response: appendToResponse
@@ -53,47 +56,47 @@ export class TvSeasonsEndpoint extends BaseEndpoint {
 
     return await this.api.get<AppendToResponse<SeasonDetails, T, 'tvSeason'>>(
       `${BASE_SEASON(seasonSelection)}`,
-      combinedOptions
+      combinedOptions,
     );
   }
 
   async aggregateCredits(
     seasonSelection: SeasonSelection,
-    options?: LanguageOption
+    options?: LanguageOption,
   ) {
     return await this.api.get<AggregateCredits>(
       `${BASE_SEASON(seasonSelection)}/aggregate_credits`,
-      options
+      options,
     );
   }
 
   async changes(seasonId: number, options?: ChangeOption) {
     return await this.api.get<Changes<TvSeasonChangeValue>>(
       `/tv/season/${seasonId}/changes`,
-      options
+      options,
     );
   }
 
   async credits(seasonSelection: SeasonSelection, options?: LanguageOption) {
     return await this.api.get<Credits>(
       `${BASE_SEASON(seasonSelection)}/credits`,
-      options
+      options,
     );
   }
 
   async externalIds(
     seasonSelection: SeasonSelection,
-    options?: LanguageOption
+    options?: LanguageOption,
   ) {
     return await this.api.get<ExternalIds>(
       `${BASE_SEASON(seasonSelection)}/external_ids`,
-      options
+      options,
     );
   }
 
   async images(
     seasonSelection: SeasonSelection,
-    options?: TvSeasonImageSearchOptions
+    options?: TvSeasonImageSearchOptions,
   ) {
     const computedOptions = {
       include_image_language: options?.include_image_language?.join(','),
@@ -101,13 +104,13 @@ export class TvSeasonsEndpoint extends BaseEndpoint {
     };
     return await this.api.get<Images>(
       `${BASE_SEASON(seasonSelection)}/images`,
-      computedOptions
+      computedOptions,
     );
   }
 
   async videos(
     seasonSelection: SeasonSelection,
-    options?: TvSeasonVideoSearchOptions
+    options?: TvSeasonVideoSearchOptions,
   ) {
     const computedOptions = {
       include_video_language: options?.include_video_language?.join(','),
@@ -115,17 +118,17 @@ export class TvSeasonsEndpoint extends BaseEndpoint {
     };
     return await this.api.get<Videos>(
       `${BASE_SEASON(seasonSelection)}/videos`,
-      computedOptions
+      computedOptions,
     );
   }
 
   async translations(
     seasonSelection: SeasonSelection,
-    options?: LanguageOption
+    options?: LanguageOption,
   ) {
     return await this.api.get<Translations>(
       `${BASE_SEASON(seasonSelection)}/translations`,
-      options
+      options,
     );
   }
 }

@@ -8,8 +8,11 @@ import {
 } from '../types/configuration';
 
 export class ConfigurationEndpoint extends BaseEndpoint {
-  constructor(protected readonly accessToken: string) {
-    super(accessToken);
+  constructor(
+    protected readonly accessToken: string,
+    private baseURL: string,
+  ) {
+    super(accessToken, baseURL);
   }
 
   async getApiConfiguration(): Promise<Configuration> {
@@ -18,13 +21,13 @@ export class ConfigurationEndpoint extends BaseEndpoint {
 
   async getCountries(): Promise<CountryConfiguration[]> {
     return await this.api.get<CountryConfiguration[]>(
-      `/configuration/countries`
+      `/configuration/countries`,
     );
   }
 
   async getLanguages(): Promise<LanguageConfiguration[]> {
     return await this.api.get<LanguageConfiguration[]>(
-      `/configuration/languages`
+      `/configuration/languages`,
     );
   }
 
@@ -38,7 +41,7 @@ export class ConfigurationEndpoint extends BaseEndpoint {
 
   async getTimezones(): Promise<TimezoneConfiguration[]> {
     return await this.api.get<TimezoneConfiguration[]>(
-      `/configuration/timezones`
+      `/configuration/timezones`,
     );
   }
 }

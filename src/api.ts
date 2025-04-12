@@ -4,14 +4,17 @@ import { ErrorResponse } from './types';
 import { BASE_URL_V3 } from './common/constants';
 
 export class Api {
-  constructor(private accessToken: string) {
+  constructor(
+    private readonly accessToken: string,
+    private baseUrl = BASE_URL_V3,
+  ) {
     this.accessToken = accessToken;
   }
 
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   async get<T>(path: string, options?: Record<string, any>): Promise<T> {
     const params = parseOptions(options);
-    const response = await fetch(`${BASE_URL_V3}${path}?${params}`, {
+    const response = await fetch(`${this.baseUrl}${path}?${params}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.accessToken}`,

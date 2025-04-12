@@ -2,8 +2,11 @@ import { BaseEndpoint } from './base';
 import { AccountDetails } from '../types/account';
 
 export class AccountEndpoint extends BaseEndpoint {
-  constructor(accessToken: string) {
-    super(accessToken);
+  constructor(
+    accessToken: string,
+    private baseURL: string,
+  ) {
+    super(accessToken, baseURL);
   }
 
   async details(): Promise<AccountDetails> {

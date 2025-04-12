@@ -60,30 +60,33 @@ export interface MultiSearchOptions
 }
 
 export class SearchEndpoint extends BaseEndpoint {
-  constructor(protected readonly accessToken: string) {
-    super(accessToken);
+  constructor(
+    protected readonly accessToken: string,
+    private readonly baseURL: string,
+  ) {
+    super(accessToken, baseURL);
   }
 
   async companies(options: SearchOptions): Promise<Search<Company>> {
     return await this.api.get<Search<Company>>(
       `${BASE_SEARCH}/company`,
-      options
+      options,
     );
   }
 
   async collections(options: SearchOptions): Promise<Search<Collection>> {
     return await this.api.get<Search<Collection>>(
       `${BASE_SEARCH}/collection`,
-      options
+      options,
     );
   }
 
   async keywords(
-    options: SearchOptions
+    options: SearchOptions,
   ): Promise<Search<{ id: string; name: string }>> {
     return await this.api.get<Search<{ id: string; name: string }>>(
       `${BASE_SEARCH}/keyword`,
-      options
+      options,
     );
   }
 
@@ -102,7 +105,7 @@ export class SearchEndpoint extends BaseEndpoint {
   async multi(options: MultiSearchOptions): Promise<Search<MultiSearchResult>> {
     return await this.api.get<Search<MultiSearchResult>>(
       `${BASE_SEARCH}/multi`,
-      options
+      options,
     );
   }
 }

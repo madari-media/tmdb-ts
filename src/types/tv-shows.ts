@@ -1,9 +1,9 @@
 import {
   Genre,
+  LanguageOption,
   ProductionCompany,
   ProductionCountry,
   SpokenLanguage,
-  LanguageOption,
 } from './';
 
 export interface CreatedBy {

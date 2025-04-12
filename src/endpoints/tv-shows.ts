@@ -25,11 +25,11 @@ import {
   TimezoneOption,
   TopRatedTvShows,
   Translations,
-  TvShowImageOptions,
-  TvShowVideoOptions,
   TvShowChangeValue,
   TvShowDetails,
+  TvShowImageOptions,
   TvShowsAiringToday,
+  TvShowVideoOptions,
   Videos,
   WatchProviders,
 } from '../types';
@@ -37,14 +37,17 @@ import {
 const BASE_TV = '/tv';
 
 export class TvShowsEndpoint extends BaseEndpoint {
-  constructor(protected readonly accessToken: string) {
-    super(accessToken);
+  constructor(
+    protected readonly accessToken: string,
+    private readonly baseURL: string,
+  ) {
+    super(accessToken, baseURL);
   }
 
   async details<T extends AppendToResponseTvKey[] | undefined>(
     id: number,
     appendToResponse?: T,
-    language?: string
+    language?: string,
   ) {
     const options = {
       append_to_response: appendToResponse
@@ -54,39 +57,39 @@ export class TvShowsEndpoint extends BaseEndpoint {
     };
     return await this.api.get<AppendToResponse<TvShowDetails, T, 'tvShow'>>(
       `${BASE_TV}/${id}`,
-      options
+      options,
     );
   }
 
   async alternativeTitles(id: number): Promise<AlternativeTitles> {
     return await this.api.get<AlternativeTitles>(
-      `${BASE_TV}/${id}/alternative_titles`
+      `${BASE_TV}/${id}/alternative_titles`,
     );
   }
 
   async changes(
     id: number,
-    options?: ChangeOption
+    options?: ChangeOption,
   ): Promise<Changes<TvShowChangeValue>> {
     return await this.api.get<Changes<TvShowChangeValue>>(
       `${BASE_TV}/${id}/changes`,
-      options
+      options,
     );
   }
 
   async contentRatings(id: number): Promise<ContentRatings> {
     return await this.api.get<ContentRatings>(
-      `${BASE_TV}/${id}/content_ratings`
+      `${BASE_TV}/${id}/content_ratings`,
     );
   }
 
   async aggregateCredits(
     id: number,
-    options?: LanguageOption
+    options?: LanguageOption,
   ): Promise<AggregateCredits> {
     return await this.api.get<AggregateCredits>(
       `${BASE_TV}/${id}/aggregate_credits`,
-      options
+      options,
     );
   }
 
@@ -96,7 +99,7 @@ export class TvShowsEndpoint extends BaseEndpoint {
 
   async season(tvId: number, seasonNumber: number): Promise<SeasonDetails> {
     return await this.api.get<SeasonDetails>(
-      `${BASE_TV}/${tvId}/season/${seasonNumber}`
+      `${BASE_TV}/${tvId}/season/${seasonNumber}`,
     );
   }
 
@@ -115,7 +118,7 @@ export class TvShowsEndpoint extends BaseEndpoint {
     };
     return await this.api.get<Images>(
       `${BASE_TV}/${id}/images`,
-      computedOptions
+      computedOptions,
     );
   }
 
@@ -125,34 +128,34 @@ export class TvShowsEndpoint extends BaseEndpoint {
 
   async recommendations(
     id: number,
-    options?: LanguageOption & PageOption
+    options?: LanguageOption & PageOption,
   ): Promise<Recommendations> {
     return await this.api.get<Recommendations>(
       `${BASE_TV}/${id}/recommendations`,
-      options
+      options,
     );
   }
 
   async reviews(
     id: number,
-    options?: LanguageOption & PageOption
+    options?: LanguageOption & PageOption,
   ): Promise<Reviews> {
     return await this.api.get<Reviews>(`${BASE_TV}/${id}/reviews`, options);
   }
 
   async screenedTheatrically(id: number): Promise<ScreenedTheatrically> {
     return await this.api.get<ScreenedTheatrically>(
-      `${BASE_TV}/${id}/screened_theatrically`
+      `${BASE_TV}/${id}/screened_theatrically`,
     );
   }
 
   async similar(
     id: number,
-    options?: LanguageOption & PageOption
+    options?: LanguageOption & PageOption,
   ): Promise<SimilarTvShows> {
     return await this.api.get<SimilarTvShows>(
       `${BASE_TV}/${id}/similar`,
-      options
+      options,
     );
   }
 
@@ -167,7 +170,7 @@ export class TvShowsEndpoint extends BaseEndpoint {
     };
     return await this.api.get<Videos>(
       `${BASE_TV}/${id}/videos`,
-      computedOptions
+      computedOptions,
     );
   }
 
@@ -177,7 +180,7 @@ export class TvShowsEndpoint extends BaseEndpoint {
    */
   async watchProviders(id: number): Promise<WatchProviders> {
     return await this.api.get<WatchProviders>(
-      `${BASE_TV}/${id}/watch/providers`
+      `${BASE_TV}/${id}/watch/providers`,
     );
   }
 
@@ -186,28 +189,28 @@ export class TvShowsEndpoint extends BaseEndpoint {
   }
 
   async onTheAir(
-    options?: PageOption & LanguageOption & TimezoneOption
+    options?: PageOption & LanguageOption & TimezoneOption,
   ): Promise<OnTheAir> {
     return await this.api.get<OnTheAir>(`${BASE_TV}/on_the_air`, options);
   }
 
   async airingToday(
-    options?: PageOption & LanguageOption & TimezoneOption
+    options?: PageOption & LanguageOption & TimezoneOption,
   ): Promise<TvShowsAiringToday> {
     return await this.api.get<TvShowsAiringToday>(
       `${BASE_TV}/airing_today`,
-      options
+      options,
     );
   }
 
   async popular(
-    options?: PageOption & LanguageOption
+    options?: PageOption & LanguageOption,
   ): Promise<PopularTvShows> {
     return await this.api.get<PopularTvShows>(`${BASE_TV}/popular`, options);
   }
 
   async topRated(
-    options?: PageOption & LanguageOption
+    options?: PageOption & LanguageOption,
   ): Promise<TopRatedTvShows> {
     return await this.api.get<TopRatedTvShows>(`${BASE_TV}/top_rated`, options);
   }

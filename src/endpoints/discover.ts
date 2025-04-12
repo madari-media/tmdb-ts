@@ -9,21 +9,24 @@ import { BaseEndpoint } from './base';
 const BASE_DISCOVER = '/discover';
 
 export class DiscoverEndpoint extends BaseEndpoint {
-  constructor(accessToken: string) {
-    super(accessToken);
+  constructor(
+    accessToken: string,
+    private readonly baseURL: string,
+  ) {
+    super(accessToken, baseURL);
   }
 
   async movie(options?: MovieQueryOptions): Promise<MovieDiscoverResult> {
     return await this.api.get<MovieDiscoverResult>(
       `${BASE_DISCOVER}/movie`,
-      options
+      options,
     );
   }
 
   async tvShow(options?: TvShowQueryOptions): Promise<TvShowDiscoverResult> {
     return await this.api.get<TvShowDiscoverResult>(
       `${BASE_DISCOVER}/tv`,
-      options
+      options,
     );
   }
 }

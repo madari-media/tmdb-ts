@@ -10,23 +10,26 @@ import { BaseEndpoint } from './base';
 const BASE_COLLECTION = '/collection';
 
 export class CollectionsEndpoint extends BaseEndpoint {
-  constructor(protected readonly accessToken: string) {
-    super(accessToken);
+  constructor(
+    protected readonly accessToken: string,
+    private readonly baseURL: string,
+  ) {
+    super(accessToken, baseURL);
   }
 
   async details(
     id: number,
-    options?: LanguageOption
+    options?: LanguageOption,
   ): Promise<CollectionDetails> {
     return await this.api.get<CollectionDetails>(
       `${BASE_COLLECTION}/${id}`,
-      options
+      options,
     );
   }
 
   async images(
     id: number,
-    options?: CollectionImageOptions
+    options?: CollectionImageOptions,
   ): Promise<ImageCollection> {
     const computedOptions = {
       include_image_language: options?.include_image_language?.join(','),
@@ -34,17 +37,17 @@ export class CollectionsEndpoint extends BaseEndpoint {
     };
     return await this.api.get<ImageCollection>(
       `${BASE_COLLECTION}/${id}/images`,
-      computedOptions
+      computedOptions,
     );
   }
 
   async translations(
     id: number,
-    options?: LanguageOption
+    options?: LanguageOption,
   ): Promise<Translations> {
     return await this.api.get<Translations>(
       `${BASE_COLLECTION}/${id}/translations`,
-      options
+      options,
     );
   }
 }

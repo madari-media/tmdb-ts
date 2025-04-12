@@ -1,11 +1,11 @@
 import {
-  Movie,
-  Person,
-  TV,
   MediaType,
+  Movie,
   MovieWithMediaType,
-  TVWithMediaType,
+  Person,
   PersonWithMediaType,
+  TV,
+  TVWithMediaType,
 } from '.';
 
 export type TimeWindow = 'day' | 'week';

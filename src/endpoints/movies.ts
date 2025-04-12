@@ -39,14 +39,17 @@ export interface MoviesImageSearchOptions extends LanguageOption {
 }
 
 export class MoviesEndpoint extends BaseEndpoint {
-  constructor(protected readonly accessToken: string) {
-    super(accessToken);
+  constructor(
+    protected readonly accessToken: string,
+    private readonly baseURL: string,
+  ) {
+    super(accessToken, baseURL);
   }
 
   async details<T extends AppendToResponseMovieKey[] | undefined>(
     id: number,
     appendToResponse?: T,
-    language?: string
+    language?: string,
   ) {
     const options = {
       append_to_response: appendToResponse
@@ -57,23 +60,23 @@ export class MoviesEndpoint extends BaseEndpoint {
 
     return await this.api.get<AppendToResponse<MovieDetails, T, 'movie'>>(
       `${BASE_MOVIE}/${id}`,
-      options
+      options,
     );
   }
 
   async alternativeTitles(id: number): Promise<AlternativeTitles> {
     return await this.api.get<AlternativeTitles>(
-      `${BASE_MOVIE}/${id}/alternative_titles`
+      `${BASE_MOVIE}/${id}/alternative_titles`,
     );
   }
 
   async changes(
     id: number,
-    options?: ChangeOption
+    options?: ChangeOption,
   ): Promise<Changes<MovieChangeValue>> {
     return await this.api.get<Changes<MovieChangeValue>>(
       `${BASE_MOVIE}/${id}/changes`,
-      options
+      options,
     );
   }
 
@@ -87,7 +90,7 @@ export class MoviesEndpoint extends BaseEndpoint {
 
   async images(
     id: number,
-    options?: MoviesImageSearchOptions
+    options?: MoviesImageSearchOptions,
   ): Promise<Images> {
     const computedOptions = {
       include_image_language: options?.include_image_language?.join(','),
@@ -95,7 +98,7 @@ export class MoviesEndpoint extends BaseEndpoint {
     };
     return await this.api.get<Images>(
       `${BASE_MOVIE}/${id}/images`,
-      computedOptions
+      computedOptions,
     );
   }
 
@@ -105,41 +108,41 @@ export class MoviesEndpoint extends BaseEndpoint {
 
   async lists(
     id: number,
-    options?: LanguageOption & PageOption
+    options?: LanguageOption & PageOption,
   ): Promise<MovieLists> {
     return await this.api.get<MovieLists>(`${BASE_MOVIE}/${id}/lists`, options);
   }
 
   async recommendations(
     id: number,
-    options?: LanguageOption & PageOption
+    options?: LanguageOption & PageOption,
   ): Promise<Recommendations> {
     return await this.api.get<Recommendations>(
       `${BASE_MOVIE}/${id}/recommendations`,
-      options
+      options,
     );
   }
 
   async releaseDates(id: number): Promise<ReleaseDates> {
     return await this.api.get<ReleaseDates>(
-      `${BASE_MOVIE}/${id}/release_dates`
+      `${BASE_MOVIE}/${id}/release_dates`,
     );
   }
 
   async reviews(
     id: number,
-    options?: LanguageOption & PageOption
+    options?: LanguageOption & PageOption,
   ): Promise<Reviews> {
     return await this.api.get<Reviews>(`${BASE_MOVIE}/${id}/reviews`, options);
   }
 
   async similar(
     id: number,
-    options?: LanguageOption & PageOption
+    options?: LanguageOption & PageOption,
   ): Promise<SimilarMovies> {
     return await this.api.get<SimilarMovies>(
       `${BASE_MOVIE}/${id}/similar`,
-      options
+      options,
     );
   }
 
@@ -157,7 +160,7 @@ export class MoviesEndpoint extends BaseEndpoint {
    */
   async watchProviders(id: number): Promise<WatchProviders> {
     return await this.api.get<WatchProviders>(
-      `${BASE_MOVIE}/${id}/watch/providers`
+      `${BASE_MOVIE}/${id}/watch/providers`,
     );
   }
 
@@ -166,11 +169,11 @@ export class MoviesEndpoint extends BaseEndpoint {
   }
 
   async nowPlaying(
-    options?: PageOption & LanguageOption & RegionOption
+    options?: PageOption & LanguageOption & RegionOption,
   ): Promise<MoviesPlayingNow> {
     return await this.api.get<MoviesPlayingNow>(
       `${BASE_MOVIE}/now_playing`,
-      options
+      options,
     );
   }
 
@@ -179,20 +182,20 @@ export class MoviesEndpoint extends BaseEndpoint {
   }
 
   async topRated(
-    options?: PageOption & LanguageOption & RegionOption
+    options?: PageOption & LanguageOption & RegionOption,
   ): Promise<TopRatedMovies> {
     return await this.api.get<TopRatedMovies>(
       `${BASE_MOVIE}/top_rated`,
-      options
+      options,
     );
   }
 
   async upcoming(
-    options?: PageOption & LanguageOption & RegionOption
+    options?: PageOption & LanguageOption & RegionOption,
   ): Promise<UpcomingMovies> {
     return await this.api.get<UpcomingMovies>(
       `${BASE_MOVIE}/upcoming`,
-      options
+      options,
     );
   }
 }

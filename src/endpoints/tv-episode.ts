@@ -1,17 +1,17 @@
 import {
+  AppendToResponse,
+  AppendToResponseTvEpisodeKey,
+  ChangeOption,
+  Changes,
   Episode,
   EpisodeSelection,
-  LanguageOption,
-  ChangeOption,
-  TvEpisodeCredit,
   ExternalIds,
   Images,
+  LanguageOption,
+  TvEpisodeChangeValue,
+  TvEpisodeCredit,
   TvEpisodeTranslations,
   Videos,
-  AppendToResponse,
-  Changes,
-  TvEpisodeChangeValue,
-  AppendToResponseTvEpisodeKey,
 } from '..';
 import { BaseEndpoint } from './base';
 
@@ -34,14 +34,17 @@ export interface TvEpisodeVideoSearchOptions extends LanguageOption {
 }
 
 export class TvEpisodesEndpoint extends BaseEndpoint {
-  constructor(accessToken: string) {
-    super(accessToken);
+  constructor(
+    accessToken: string,
+    private readonly baseURL: string,
+  ) {
+    super(accessToken, baseURL);
   }
 
   async details<T extends AppendToResponseTvEpisodeKey[] | undefined>(
     episodeSelection: EpisodeSelection,
     appendToResponse?: T,
-    options?: LanguageOption
+    options?: LanguageOption,
   ) {
     const combinedOptions = {
       append_to_response: appendToResponse
@@ -58,26 +61,26 @@ export class TvEpisodesEndpoint extends BaseEndpoint {
   async changes(episodeID: number, options?: ChangeOption) {
     return await this.api.get<Changes<TvEpisodeChangeValue>>(
       `/tv/episode/${episodeID}/changes`,
-      options
+      options,
     );
   }
 
   async credits(episodeSelection: EpisodeSelection, options?: LanguageOption) {
     return await this.api.get<TvEpisodeCredit>(
       `${BASE_EPISODE(episodeSelection)}/credits`,
-      options
+      options,
     );
   }
 
   async externalIds(episodeSelection: EpisodeSelection) {
     return await this.api.get<ExternalIds>(
-      `${BASE_EPISODE(episodeSelection)}/external_ids`
+      `${BASE_EPISODE(episodeSelection)}/external_ids`,
     );
   }
 
   async images(
     episodeSelection: EpisodeSelection,
-    options?: TvEpisodeImageSearchOptions
+    options?: TvEpisodeImageSearchOptions,
   ) {
     const computedOptions = {
       include_image_language: options?.include_image_language?.join(','),
@@ -85,19 +88,19 @@ export class TvEpisodesEndpoint extends BaseEndpoint {
     };
     return await this.api.get<Images>(
       `${BASE_EPISODE(episodeSelection)}/images`,
-      computedOptions
+      computedOptions,
     );
   }
 
   async translations(episodeSelection: EpisodeSelection) {
     return await this.api.get<TvEpisodeTranslations>(
-      `${BASE_EPISODE(episodeSelection)}/translations`
+      `${BASE_EPISODE(episodeSelection)}/translations`,
     );
   }
 
   async videos(
     episodeSelection: EpisodeSelection,
-    options?: TvEpisodeVideoSearchOptions
+    options?: TvEpisodeVideoSearchOptions,
   ) {
     const computedOptions = {
       include_video_language: options?.include_video_language?.join(','),
@@ -105,7 +108,7 @@ export class TvEpisodesEndpoint extends BaseEndpoint {
     };
     return await this.api.get<Videos>(
       `${BASE_EPISODE(episodeSelection)}/videos`,
-      computedOptions
+      computedOptions,
     );
   }
 }
